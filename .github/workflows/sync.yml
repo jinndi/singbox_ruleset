@@ -20,18 +20,24 @@ jobs:
 
       - name: Download external files
         run: |
-          curl -Lo adguard.srs   "https://cdn.jsdelivr.net/gh/jinndi/adguard-filter-list-srs@main/adguard-filter-list.srs"
-          curl -Lo cheburnet.srs "https://cdn.jsdelivr.net/gh/jinndi/geosite-cheburnet@main/geosite-cheburnet.srs"
-          curl -Lo filter.srs    "https://cdn.jsdelivr.net/gh/jinndi/fakeip-filter-srs@main/fakeip-filter.srs"
-          curl -Lo proxy.srs     "https://cdn.jsdelivr.net/gh/jinndi/geosite-blocked@main/geosite-blocked.srs"
-          curl -Lo ruip.srs      "https://cdn.jsdelivr.net/gh/jinndi/geoip-ru@main/ru-no-blocked.srs"
+          FILES=(
+            "adguard.srs=https://cdn.jsdelivr.net/gh/jinndi/adguard-filter-list-srs@main/adguard-filter-list.srs"
+            "cheburnet.srs=https://cdn.jsdelivr.net/gh/jinndi/geosite-cheburnet@main/geosite-cheburnet.srs"
+            "filter.srs=https://cdn.jsdelivr.net/gh/jinndi/fakeip-filter-srs@main/fakeip-filter.srs"
+            "proxy.srs=https://cdn.jsdelivr.net/gh/jinndi/geosite-blocked@main/geosite-blocked.srs"
+            "ruip.srs=https://cdn.jsdelivr.net/gh/jinndi/geoip-ru@main/ru-no-blocked.srs"
+            "ru.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ru.srs"
+            "ipdetect.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ip-geo-detect.srs"
+            "private.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/private.srs"
+            "trackers.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-public-tracker.srs"
+            "games.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-games.srs"
+            "ai.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ai-chat-!cn.srs"
+            "telegramip.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geoip/telegram.srs"
+          )
 
-          curl -Lo ru.srs        "https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ru.srs"
-          curl -Lo ipdetect.srs  "https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ip-geo-detect.srs"
-          curl -Lo private.srs   "https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/private.srs"
-          curl -Lo trackers.srs  "https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-public-tracker.srs"
-          curl -Lo games.srs     "https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-games.srs"
-          curl -Lo ai.srs        "https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ai-chat-!cn.srs"
+          for file in "${FILES[@]}"; do
+            curl -Lo "${file%%=*}" "${file#*=}"
+          done
 
       - name: Commit and Push changes
         run: |
@@ -49,14 +55,21 @@ jobs:
 
       - name: Purge jsDelivr Cache
         run: |
-          BASE_URL="https://purge.jsdelivr.net/gh/jinndi/singbox_ruleset@main"
+          FILES=(
+            adguard.srs
+            cheburnet.srs
+            filter.srs
+            proxy.srs
+            ruip.srs
+            ru.srs
+            ipdetect.srs
+            private.srs
+            trackers.srs
+            games.srs
+            ai.srs
+            telegramip.srs
+          )
 
-          for file in adguard.srs cheburnet.srs filter.srs proxy.srs ruip.srs; do
-            curl -sfL "$BASE_URL/$file"
-          done
-
-          BASE_URL2="https://purge.jsdelivr.net/gh/jinndi/singbox_ruleset@main"
-
-          for file in ru.srs ipdetect.srs private.srs trackers.srs games.srs ai.srs; do
-            curl -sfL "$BASE_URL2/$file"
+          for file in "${FILES[@]}"; do
+            curl -sfL "https://purge.jsdelivr.net/gh/jinndi/singbox_ruleset@main/$file"
           done
