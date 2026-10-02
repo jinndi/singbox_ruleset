@@ -21,22 +21,33 @@ jobs:
       - name: Download external files
         run: |
           FILES=(
-            "adguard.srs=https://cdn.jsdelivr.net/gh/jinndi/adguard-filter-list-srs@main/adguard-filter-list.srs"
-            "cheburnet.srs=https://cdn.jsdelivr.net/gh/jinndi/geosite-cheburnet@main/geosite-cheburnet.srs"
-            "filter.srs=https://cdn.jsdelivr.net/gh/jinndi/fakeip-filter-srs@main/fakeip-filter.srs"
-            "proxy.srs=https://cdn.jsdelivr.net/gh/jinndi/geosite-blocked@main/geosite-blocked.srs"
-            "ruip.srs=https://cdn.jsdelivr.net/gh/jinndi/geoip-ru@main/ru-no-blocked.srs"
-            "ru.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ru.srs"
-            "ipdetect.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ip-geo-detect.srs"
-            "private.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/private.srs"
-            "trackers.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-public-tracker.srs"
-            "games.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-games.srs"
-            "ai.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geosite/category-ai-chat-!cn.srs"
-            "telegramip.srs=https://cdn.jsdelivr.net/gh/KaringX/karing-ruleset@sing/geo/geoip/telegram.srs"
+            "adguard.srs=https://raw.githubusercontent.com/jinndi/adguard-filter-list-srs/main/adguard-filter-list.srs"
+            "cheburnet.srs=https://raw.githubusercontent.com/jinndi/geosite-cheburnet/main/geosite-cheburnet.srs"
+            "filter.srs=https://raw.githubusercontent.com/jinndi/fakeip-filter-srs/main/fakeip-filter.srs"
+            "proxy.srs=https://raw.githubusercontent.com/jinndi/geosite-blocked/main/geosite-blocked.srs"
+            "ruip.srs=https://raw.githubusercontent.com/jinndi/geoip-ru/main/ru-no-blocked.srs"
+            "ru.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ru.srs"
+            "ipdetect.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ip-geo-detect.srs"
+            "private.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/private.srs"
+            "trackers.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-public-tracker.srs"
+            "games.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-games.srs"
+            "ai.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ai-chat-!cn.srs"
+            "telegramip.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geoip/telegram.srs"
           )
 
           for file in "${FILES[@]}"; do
-            curl -Lo "${file%%=*}" "${file#*=}"
+            out="${file%%*=}"
+            url="${file#*=}"
+            echo "Downloading $out from $url..."
+            
+            # Скачиваем с повторами и проверкой HTTP-ошибок
+            curl -fL --retry 3 --retry-delay 5 -o "$out" "$url"
+            
+            # Проверка, что файл не превратился в HTML-страницу с ошибкой
+            if head -c 5 "$out" | grep -q "<html"; then
+              echo "Ошибка: Получен HTML вместо файла для $out"
+              exit 1
+            fi
           done
 
       - name: Commit and Push changes
