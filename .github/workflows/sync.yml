@@ -52,18 +52,25 @@ jobs:
             fi
           done
 
+      - name: Create ruleset.zip archive
+        run: |
+          # Упаковываем все .srs файлы в ruleset.zip
+          zip ruleset.zip *.srs
+          echo "Архив ruleset.zip успешно создан."
+
       - name: Commit and Push changes
         run: |
-          if [ -z "$(git status --porcelain '*.srs')" ]; then
-            echo "Файлы не изменились. Выходим."
+          # Проверяем изменения как по .srs файлам, так и по архиву
+          if [ -z "$(git status --porcelain '*.srs' 'ruleset.zip')" ]; then
+            echo "Файлы и архив не изменились. Выходим."
             exit 0
           fi
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add '*.srs'
-          git commit -m "[auto] Update synced rules $(date '+%Y-%m-%d %H:%M:%S')"
+          git add '*.srs' ruleset.zip
+          git commit -m "[auto] Update synced rules and ruleset.zip $(date '+%Y-%m-%d %H:%M:%S')"
           git push origin main
 
       - name: Purge jsDelivr Cache
@@ -81,6 +88,7 @@ jobs:
             games.srs
             ai.srs
             telegramip.srs
+            ruleset.zip
           )
 
           for file in "${FILES[@]}"; do
