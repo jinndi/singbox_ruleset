@@ -54,8 +54,15 @@ jobs:
 
       - name: Create ruleset archive
         run: |
-          # Упаковываем все .srs файлы в ruleset.tar.gz (сжатие gzip)
-          tar -czf ruleset.tar.gz *.srs
+          # Создаем временную папку и переносим туда файлы
+          mkdir -p ruleset
+          cp *.srs ruleset/
+          
+          # Упаковываем всю папку ruleset целиком
+          tar -czf ruleset.tar.gz ruleset/
+          
+          # Очищаем за собой временную папку
+          rm -rf ruleset
           echo "Архив ruleset.tar.gz успешно создан."
 
       - name: Commit and Push changes
