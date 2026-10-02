@@ -21,23 +21,25 @@ jobs:
       - name: Download external files
         run: |
           FILES=(
-            "adguard.srs=https://raw.githubusercontent.com/jinndi/adguard-filter-list-srs/main/adguard-filter-list.srs"
-            "cheburnet.srs=https://raw.githubusercontent.com/jinndi/geosite-cheburnet/main/geosite-cheburnet.srs"
-            "filter.srs=https://raw.githubusercontent.com/jinndi/fakeip-filter-srs/main/fakeip-filter.srs"
-            "proxy.srs=https://raw.githubusercontent.com/jinndi/geosite-blocked/main/geosite-blocked.srs"
-            "ruip.srs=https://raw.githubusercontent.com/jinndi/geoip-ru/main/ru-no-blocked.srs"
-            "ru.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ru.srs"
-            "ipdetect.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ip-geo-detect.srs"
-            "private.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/private.srs"
-            "trackers.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-public-tracker.srs"
-            "games.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-games.srs"
-            "ai.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ai-chat-!cn.srs"
-            "telegramip.srs=https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geoip/telegram.srs"
+            "adguard.srs https://raw.githubusercontent.com/jinndi/adguard-filter-list-srs/main/adguard-filter-list.srs"
+            "cheburnet.srs https://raw.githubusercontent.com/jinndi/geosite-cheburnet/main/geosite-cheburnet.srs"
+            "filter.srs https://raw.githubusercontent.com/jinndi/fakeip-filter-srs/main/fakeip-filter.srs"
+            "proxy.srs https://raw.githubusercontent.com/jinndi/geosite-blocked/main/geosite-blocked.srs"
+            "ruip.srs https://raw.githubusercontent.com/jinndi/geoip-ru/main/ru-no-blocked.srs"
+            "ru.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ru.srs"
+            "ipdetect.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ip-geo-detect.srs"
+            "private.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/private.srs"
+            "trackers.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-public-tracker.srs"
+            "games.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-games.srs"
+            "ai.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geosite/category-ai-chat-!cn.srs"
+            "telegramip.srs https://raw.githubusercontent.com/KaringX/karing-ruleset/sing/geo/geoip/telegram.srs"
           )
 
-          for file in "${FILES[@]}"; do
-            out="${file%%*=}"
-            url="${file#*=}"
+          for item in "${FILES[@]}"; do
+            # Разбиваем строку по пробелу на имя файла и URL
+            out="${item%% *}"
+            url="${item#* }"
+            
             echo "Downloading $out from $url..."
             
             # Скачиваем с повторами и проверкой HTTP-ошибок
