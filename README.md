@@ -22,4 +22,4 @@
 | **games.srs** | `https://cdn.jsdelivr.net/gh/jinndi/singbox_ruleset@main/games.srs` | [category-games](https://github.com/KaringX/karing-ruleset/blob/sing/geo/geosite/category-games.json) | KaringX |
 | **ai.srs** | `https://cdn.jsdelivr.net/gh/jinndi/singbox_ruleset@main/ai.srs` | [category-ai-chat-!cn](https://github.com/KaringX/karing-ruleset/blob/sing/geo/geosite/category-ai-chat-!cn.json) | KaringX |
 | **telegramip.srs** | `https://cdn.jsdelivr.net/gh/jinndi/singbox_ruleset@main/telegramip.srs` | [telegram](https://github.com/KaringX/karing-ruleset/blob/sing/geo/geoip/telegram.json) | KaringX |
-| **ruleset.zip** | `https://cdn.jsdelivr.net/gh/jinndi/singbox_ruleset@main/ruleset.tar.gz` | * | Все вышеперечисленные одним архивом |
+| **ruleset.tar.gz** | `https://cdn.jsdelivr.net/gh/jinndi/singbox_ruleset@main/ruleset.tar.gz` | * | Все вышеперечисленные одним архивом |
